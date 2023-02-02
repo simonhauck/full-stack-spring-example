@@ -7,9 +7,13 @@ plugins {
     id("org.sonarqube")
     id("com.adarshr.test-logger")
     id("com.coditory.integration-test")
+    id("com.ncorti.ktfmt.gradle")
 }
 
-// Kotlin Config
+// ---------------------------------------------------------------------------------------------------------------------
+// Kotlin config
+// ---------------------------------------------------------------------------------------------------------------------
+
 kotlin {
     jvmToolchain {
         this.languageVersion.set(JavaLanguageVersion.of(Constants.JAVA_VERSION))
@@ -24,7 +28,24 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-// Test config
+// ---------------------------------------------------------------------------------------------------------------------
+// Kotlin formatter
+// ---------------------------------------------------------------------------------------------------------------------
+
+ktfmt {
+    // KotlinLang style - 4 space indentation - From kotlinlang.org/docs/coding-conventions.html
+    kotlinLangStyle()
+
+    blockIndent.set(4)
+    continuationIndent.set(4)
+
+    removeUnusedImports.set(true)
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Testing config
+// ---------------------------------------------------------------------------------------------------------------------
+
 tasks.withType<Test>() {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)

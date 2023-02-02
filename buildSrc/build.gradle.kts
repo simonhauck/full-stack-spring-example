@@ -24,6 +24,9 @@ dependencies {
     // Kotlin version
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
 
+    // Kotlin formatting
+    implementation("com.ncorti.ktfmt.gradle:plugin:0.11.0")
+
     // Spring plugins
     implementation("org.springframework.boot:spring-boot-gradle-plugin:3.0.1")
     implementation("io.spring.gradle:dependency-management-plugin:1.1.0")
