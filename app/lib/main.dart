@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:server/server.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,8 +50,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String responseText = "No request";
 
-  void _incrementCounter() {
+
+  final api = Server(basePathOverride: "http://10.0.2.2:8080").getExampleControllerApi();
+
+
+  void _incrementCounter() async {
+    var response = await api.getHelloWorld();
+
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -58,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+      responseText = response.data?.message ?? "Failed to get response";
     });
   }
 
@@ -100,8 +109,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headlineMedium,
             ),
+            Text(responseText),
           ],
         ),
       ),

@@ -1,44 +1,79 @@
+import org.gradle.internal.os.OperatingSystem
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
 plugins {
     id("com.github.simonhauck.example.artifactory")
-    id("com.github.simonhauck.example.kotlin-conventions")
-    id("com.github.simonhauck.example.spring-conventions")
-
-    // Generate open api doc
-    id("org.springdoc.openapi-gradle-plugin") version "1.6.0"
+    id("org.openapi.generator") version "6.2.1"
 }
 
-dependencies {
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+val openApiBinding: Configuration by configurations.creating {}
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
+dependencies { openApiBinding(project(":server-api")) }
 
-    // OpenApi Swagger
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+// ---------------------------------------------------------------------------------------------------------------------
+// Generate flutter binding
+// ---------------------------------------------------------------------------------------------------------------------
+val apiBindingBaseFolder = "$buildDir/api-binding"
+val openApiDirectory = "$apiBindingBaseFolder/specification"
+val clientCode = "$apiBindingBaseFolder/client"
 
-    // Logging
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
+openApiGenerate {
+    generatorName.set("dart-dio")
+    inputSpec.set("$openApiDirectory/openapi.json")
+    outputDir.set(clientCode)
 
-    // Test dependencies
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation(project(":common-test"))
-
-    // Check if the backend api matches the api definition
-    testImplementation(project(":server-api"))
-}
-
-// User another port to have it not clashing with running instances
-openApi {
-    val apiGeneratedPort = 59186
-    apiDocsUrl.set("http://localhost:$apiGeneratedPort/v3/api-docs/openapi.json")
-    outputDir.set(file("${project(":server-api").projectDir}/src/main/resources"))
-
-    customBootRun {
-        args.set(
-            listOf(
-                "--server.port=$apiGeneratedPort",
-            )
+    configOptions.set(
+        mapOf(
+            "pubAuthor" to "Spring Fullstack Example App",
+            "pubAuthorEmail" to "example@gmx.de",
+            "pubDescription" to "Flutter api binding for the server application",
+            "pubVersion" to "${project.version}",
+            "pubName" to "server",
+            "pubLibrary" to "server.api",
         )
-    }
+    )
 }
+
+// TODO Simon.Hauck 2023-02-03 - check caching behavior
+val copyApiBindingTask =
+    tasks.register<Copy>("copyApiBinding") {
+        dependsOn(openApiBinding)
+        from(zipTree(openApiBinding.singleFile))
+        into(openApiDirectory)
+
+        doFirst { delete(openApiDirectory) }
+    }
+
+val generateFlutterBindingTask =
+    tasks.withType<GenerateTask> {
+        dependsOn(copyApiBindingTask)
+        inputs.files(openApiDirectory)
+        outputs.dir(clientCode)
+        doFirst {
+            println("Deleting api binding in $clientCode$")
+            delete(clientCode)
+        }
+
+        doLast {
+            exec {
+                val commandPrefix = getOsCommandPrefix()
+                val command = commandPrefix.plus(listOf("\"flutter pub get\""))
+                println(System.getenv())
+                environment = System.getenv().toMap()
+                workingDir = file(clientCode)
+                commandLine = command
+            }
+            exec {
+                val commandPrefix = getOsCommandPrefix()
+                val command = commandPrefix.plus("\"flutter pub run build_runner build\"")
+                environment = System.getenv().toMap()
+                workingDir = file(clientCode)
+                commandLine = command
+            }
+        }
+    }
+
+val prepareEnvTask = tasks.register("prepareEnv") { dependsOn(generateFlutterBindingTask) }
+
+fun getOsCommandPrefix() =
+    if (OperatingSystem.current().isWindows) listOf("cmd.exe", "/c") else emptyList()
