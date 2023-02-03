@@ -19,7 +19,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     // Logging
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
     // Test Utility
     implementation("org.springframework.boot:spring-boot-starter-test")
