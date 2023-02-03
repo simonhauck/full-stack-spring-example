@@ -1,4 +1,4 @@
-package com.github.simonhauck.example.server.server
+package com.github.simonhauck.example.server
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

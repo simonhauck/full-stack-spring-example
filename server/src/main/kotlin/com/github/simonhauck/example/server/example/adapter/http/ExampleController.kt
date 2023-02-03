@@ -1,4 +1,4 @@
-package com.github.simonhauck.example.server.server.example.adapter.http
+package com.github.simonhauck.example.server.example.adapter.http
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
