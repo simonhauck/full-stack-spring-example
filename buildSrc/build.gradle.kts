@@ -16,7 +16,7 @@ dependencies {
     implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730")
 
     // Add integration tests
-    implementation("com.coditory.gradle:integration-test-plugin:1.4.4")
+    implementation("com.coditory.gradle:integration-test-plugin:1.4.5")
 
     // Print out test results nicely
     implementation("com.adarshr:gradle-test-logger-plugin:3.2.0")
