@@ -9,3 +9,4 @@ pluginManagement {
 
 include("server")
 include("server-api")
+include("common-test")
