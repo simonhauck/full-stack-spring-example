@@ -55,25 +55,58 @@ val generateFlutterBindingTask =
         }
 
         doLast {
-            exec {
-                val commandPrefix = getOsCommandPrefix()
-                val command = commandPrefix.plus(listOf("\"flutter pub get\""))
-                println(System.getenv())
-                environment = System.getenv().toMap()
-                workingDir = file(clientCode)
-                commandLine = command
-            }
-            exec {
-                val commandPrefix = getOsCommandPrefix()
-                val command = commandPrefix.plus("\"flutter pub run build_runner build\"")
-                environment = System.getenv().toMap()
-                workingDir = file(clientCode)
-                commandLine = command
-            }
+            runFlutterCommand("flutter pub get", clientCode)
+            runFlutterCommand("flutter pub run build_runner build", clientCode)
         }
     }
 
 val prepareEnvTask = tasks.register("prepareEnv") { dependsOn(generateFlutterBindingTask) }
+
+val buildReleaseApkTask =
+    tasks.register("buildReleaseApk") {
+        val outputDir = "$buildDir/app/outputs/flutter-apk"
+        dependsOn(prepareEnvTask)
+        // This is not 100% perfect, because the android folder could also have an effect on the
+        // output, but this is also always changing and breaking the build
+        inputs.files(
+            "$projectDir/lib",
+            "$clientCode",
+            "pubspec.yaml",
+            "pubspec.lock",
+        )
+        outputs.dir(outputDir)
+        doFirst { delete(outputDir) }
+        doLast { runFlutterCommand("flutter build apk --release") }
+    }
+
+val buildWebReleaseTask =
+    tasks.register("buildWebRelease") {
+        val outputDir = "$buildDir/web"
+        dependsOn(prepareEnvTask)
+        // This is not 100% perfect, because the android folder could also have an effect on the
+        // output, but this is also always changing and breaking the build
+        inputs.files(
+            "$projectDir/lib",
+            "${projectDir}/web",
+            "$clientCode",
+            "pubspec.yaml",
+            "pubspec.lock",
+        )
+        outputs.dir(outputDir)
+        doFirst { delete(outputDir) }
+        doLast { runFlutterCommand("flutter build web --release") }
+    }
+
+fun runFlutterCommand(flutterCommand: String, workDir: String = projectDir.absolutePath) {
+    exec {
+        val commandPrefix = getOsCommandPrefix()
+        val command = commandPrefix.plus(listOf("\"$flutterCommand\""))
+        println("Executing $command in $workDir")
+        environment = System.getenv().toMap()
+        workingDir = file(workDir)
+        commandLine = command
+    }
+}
 
 fun getOsCommandPrefix() =
     if (OperatingSystem.current().isWindows) listOf("cmd.exe", "/c") else emptyList()
