@@ -3,6 +3,7 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
     id("com.github.simonhauck.example.artifactory")
+    id("com.github.simonhauck.example.java-conventions")
     id("org.openapi.generator") version "6.3.0"
 }
 
@@ -13,6 +14,7 @@ dependencies { openApiBinding(project(":server-api")) }
 // ---------------------------------------------------------------------------------------------------------------------
 // Generate flutter binding
 // ---------------------------------------------------------------------------------------------------------------------
+
 val apiBindingBaseFolder = "$buildDir/api-binding"
 val openApiDirectory = "$apiBindingBaseFolder/specification"
 val clientCode = "$apiBindingBaseFolder/client"
@@ -62,6 +64,10 @@ val generateFlutterBindingTask =
 
 val prepareEnvTask = tasks.register("prepareEnv") { dependsOn(generateFlutterBindingTask) }
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Build App
+// ---------------------------------------------------------------------------------------------------------------------
+
 val buildReleaseApkTask =
     tasks.register("buildReleaseApk") {
         val outputDir = "$buildDir/app/outputs/flutter-apk"
@@ -70,7 +76,7 @@ val buildReleaseApkTask =
         // output, but this is also always changing and breaking the build
         inputs.files(
             "$projectDir/lib",
-            "$clientCode",
+            clientCode,
             "pubspec.yaml",
             "pubspec.lock",
         )
@@ -79,9 +85,15 @@ val buildReleaseApkTask =
         doLast { runFlutterCommand("flutter build apk --release") }
     }
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Build Web
+// ---------------------------------------------------------------------------------------------------------------------
+
+val flutterWebBuildDir = "$buildDir/web"
+
 val buildWebReleaseTask =
     tasks.register("buildWebRelease") {
-        val outputDir = "$buildDir/web"
+        val outputDir = flutterWebBuildDir
         dependsOn(prepareEnvTask)
         // This is not 100% perfect, because the android folder could also have an effect on the
         // output, but this is also always changing and breaking the build
@@ -94,8 +106,22 @@ val buildWebReleaseTask =
         )
         outputs.dir(outputDir)
         doFirst { delete(outputDir) }
-        doLast { runFlutterCommand("flutter build web --release") }
+        doLast { runFlutterCommand("flutter build web --web-renderer canvaskit --release") }
     }
+
+// We don't have java code
+tasks.compileJava { enabled = false }
+
+tasks.processResources {
+    dependsOn(buildWebReleaseTask)
+    from(flutterWebBuildDir) { into("static") }
+}
+
+tasks.assemble { dependsOn(buildReleaseApkTask) }
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Utility
+// ---------------------------------------------------------------------------------------------------------------------
 
 fun runFlutterCommand(flutterCommand: String, workDir: String = projectDir.absolutePath) {
     exec {

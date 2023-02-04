@@ -20,6 +20,10 @@ dependencies {
     // Logging
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
+    if (project.properties.containsKey("flutter")) {
+        implementation(project(":app"))
+    }
+
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation(project(":common-test"))
