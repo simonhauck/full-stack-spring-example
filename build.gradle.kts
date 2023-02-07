@@ -4,7 +4,7 @@ allprojects {
 }
 
 fun readVersionFromFile(): String {
-    val fis = java.io.FileInputStream("version.properties")
+    val fis = java.io.FileInputStream("${rootDir.absolutePath}/version.properties")
     val prop = java.util.Properties()
     prop.load(fis)
 

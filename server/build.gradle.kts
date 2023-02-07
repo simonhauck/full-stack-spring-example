@@ -8,6 +8,9 @@ plugins {
     id("org.springdoc.openapi-gradle-plugin") version "1.6.0"
 }
 
+val apiSpecification: Configuration by configurations.creating {}
+val staticFrontendResources: Configuration by configurations.creating {}
+
 dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -21,17 +24,23 @@ dependencies {
     // Logging
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
-    // To add frontend add '-Pflutter' as argument to the gradle command
-    if (project.properties.containsKey("flutter")) {
-        implementation(project(":app"))
-    }
-
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation(project(":common-test"))
 
-    // Check if the backend api matches the api definition
-    testImplementation(project(":server-api"))
+    apiSpecification(project(":server-api", "json"))
+
+    staticFrontendResources(project(":app"))
+}
+
+tasks.processResources {
+    dependsOn(staticFrontendResources, apiSpecification)
+    from(apiSpecification) { into("") }
+
+    // To add frontend add '-Pflutter' as argument to the gradle command
+    if (project.properties.containsKey("flutter")) {
+        from(zipTree(staticFrontendResources.singleFile)) { into("static") }
+    }
 }
 
 jib { container { ports = listOf("8080") } }

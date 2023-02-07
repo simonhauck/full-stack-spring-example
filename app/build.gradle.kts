@@ -3,13 +3,12 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
     id("com.github.simonhauck.example.artifactory")
-    id("com.github.simonhauck.example.java-conventions")
     id("org.openapi.generator") version "6.3.0"
 }
 
-val openApiBinding: Configuration by configurations.creating {}
+val apiSpecification: Configuration by configurations.creating {}
 
-dependencies { openApiBinding(project(":server-api")) }
+dependencies { apiSpecification(project(":server-api", "json")) }
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Generate flutter binding
@@ -36,14 +35,9 @@ openApiGenerate {
     )
 }
 
-// TODO Simon.Hauck 2023-02-03 - check caching behavior
 val copyApiBindingTask =
     tasks.register<Copy>("copyApiBinding") {
-        dependsOn(openApiBinding)
-        from(zipTree(openApiBinding.singleFile))
-        into(openApiDirectory)
-
-        doFirst { delete(openApiDirectory) }
+        performCachedCopy(openApiDirectory, apiSpecification.files)
     }
 
 val generateFlutterBindingTask =
@@ -109,19 +103,37 @@ val buildWebReleaseTask =
         doLast { runFlutterCommand("flutter build web --web-renderer canvaskit --release") }
     }
 
-// We don't have java code
-tasks.compileJava { enabled = false }
+val zipWebReleaseTask =
+    tasks.register<Zip>("zipWebRelease") {
+        dependsOn(buildWebReleaseTask)
+        from(flutterWebBuildDir)
+        destinationDirectory.set(file("$buildDir/zip"))
+        archiveBaseName.set("flutter-web")
+    }
 
-tasks.processResources {
-    dependsOn(buildWebReleaseTask)
-    from(flutterWebBuildDir) { into("static") }
-}
+tasks.register("assemble") { dependsOn(buildReleaseApkTask, zipWebReleaseTask) }
 
-tasks.assemble { dependsOn(buildReleaseApkTask) }
+val webDistZipConfig = configurations.create("default")
+
+artifacts.add(webDistZipConfig.name, zipWebReleaseTask.get())
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Test tasks
+// ---------------------------------------------------------------------------------------------------------------------
+
+val flutterTestTask =
+    tasks.register("test") {
+        dependsOn(prepareEnvTask)
+        runFlutterCommand("flutter test")
+    }
+
+tasks.register("integrationTest") { println("No integration tests defined for app module") }
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Utility
 // ---------------------------------------------------------------------------------------------------------------------
+
+tasks.register("clean") { runFlutterCommand("flutter clean") }
 
 fun runFlutterCommand(flutterCommand: String, workDir: String = projectDir.absolutePath) {
     exec {
@@ -136,3 +148,11 @@ fun runFlutterCommand(flutterCommand: String, workDir: String = projectDir.absol
 
 fun getOsCommandPrefix() =
     if (OperatingSystem.current().isWindows) listOf("cmd.exe", "/c") else emptyList()
+
+fun Copy.performCachedCopy(target: String, inputFiles: Set<Any>) {
+    inputs.files(inputFiles)
+    outputs.dir(target)
+    doFirst { delete(target) }
+    from(inputFiles)
+    into(target)
+}

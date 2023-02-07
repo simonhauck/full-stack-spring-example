@@ -50,7 +50,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  String responseText = "No request";
+  String responseText = "No requests";
 
 
   final api = Server(basePathOverride: "http://10.0.2.2:8080").getExampleControllerApi();
