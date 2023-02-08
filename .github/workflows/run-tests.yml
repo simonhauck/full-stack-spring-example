@@ -29,13 +29,18 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
+          cache-key: ${{ runner.os }}-flutter-install-cache
 
-      - name: Cache dart packages
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.PUB_CACHE }}
-          key: ${{ runner.os }}-flutter-install-cache
-          restore-keys: ${{ runner.os }}--flutter-install-cache
+      #      - name: Cache dart packages
+      #        uses: actions/cache@v2
+      #        with:
+      #          path: ${{ env.PUB_CACHE }}
+      #          key: ${{ runner.os }}-flutter-install-cache
+      #          restore-keys: ${{ runner.os }}--flutter-install-cache
+
+      - name: Test flutter path
+        run: flutter --version
 
       - name: Run test ${{matrix.module}}
         run: ./gradlew ${{matrix.module}}:test
