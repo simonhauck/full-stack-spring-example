@@ -56,7 +56,16 @@ val generateFlutterBindingTask =
         }
     }
 
-val prepareEnvTask = tasks.register("prepareEnv") { dependsOn(generateFlutterBindingTask) }
+val installPubDependenciesTask =
+    tasks.withType<GenerateTask> {
+        dependsOn(generateFlutterBindingTask)
+        inputs.files("pubspec.yaml", clientCode)
+        outputs.files("pubspec.lock")
+
+        doLast { runFlutterCommand("flutter pub get") }
+    }
+
+val prepareEnvTask = tasks.register("prepareEnv") { dependsOn(installPubDependenciesTask) }
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Build App
