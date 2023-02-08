@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest-8-cores
     strategy:
       matrix:
-        test-group:
+        module:
           [
             server,
             app,
