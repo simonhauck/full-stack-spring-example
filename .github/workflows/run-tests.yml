@@ -38,6 +38,6 @@ jobs:
           restore-keys: ${{ runner.os }}--flutter-install-cache
 
       - name: Run test ${{matrix.module}}
-        run: ./gradlew test
+        run: ./gradlew ${{matrix.module}}:test
 
 
