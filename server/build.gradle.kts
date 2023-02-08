@@ -34,11 +34,12 @@ dependencies {
 }
 
 tasks.processResources {
-    dependsOn(staticFrontendResources, apiSpecification)
+    dependsOn(apiSpecification)
     from(apiSpecification) { into("") }
 
     // To add frontend add '-Pflutter' as argument to the gradle command
     if (project.properties.containsKey("flutter")) {
+        dependsOn(staticFrontendResources)
         from(zipTree(staticFrontendResources.singleFile)) { into("static") }
     }
 }
