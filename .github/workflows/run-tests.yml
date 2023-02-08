@@ -30,7 +30,7 @@ jobs:
         with:
           channel: 'stable'
           cache: true
-          cache-key: ${{ runner.os }}-flutter-cache
+          cache-key: ${{ runner.os }}-flutter-cache-${{runner-hash}}
 
       #      - name: Cache dart packages
       #        uses: actions/cache@v2
