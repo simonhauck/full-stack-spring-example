@@ -137,8 +137,7 @@ tasks.register("clean") { runFlutterCommand("flutter clean") }
 
 fun runFlutterCommand(flutterCommand: String, workDir: String = projectDir.absolutePath) {
     exec {
-        val commandPrefix = getOsCommandPrefix()
-        val command = commandPrefix.plus(listOf("\"$flutterCommand\""))
+        val command = flutterCommand.toOsCommand()
         println("Executing $command in $workDir")
         environment = System.getenv().toMap()
         workingDir = file(workDir)
@@ -146,8 +145,13 @@ fun runFlutterCommand(flutterCommand: String, workDir: String = projectDir.absol
     }
 }
 
-fun getOsCommandPrefix() =
-    if (OperatingSystem.current().isWindows) listOf("cmd.exe", "/c") else emptyList()
+fun String.toOsCommand(): List<String> {
+    return if (OperatingSystem.current().isWindows) listOf("cmd.exe", "/c", this)
+    else this.split(" ").toList()
+}
+
+// fun getOsCommandPrefix() =
+//    if (OperatingSystem.current().isWindows) listOf("cmd.exe", "/c") else emptyList()
 
 fun Copy.performCachedCopy(target: String, inputFiles: Set<Any>) {
     inputs.files(inputFiles)
