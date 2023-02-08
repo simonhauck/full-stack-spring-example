@@ -37,6 +37,7 @@ openApiGenerate {
 
 val copyApiBindingTask =
     tasks.register<Copy>("copyApiBinding") {
+        dependsOn(apiSpecification)
         performCachedCopy(openApiDirectory, apiSpecification.files)
     }
 
@@ -57,7 +58,7 @@ val generateFlutterBindingTask =
     }
 
 val installPubDependenciesTask =
-    tasks.withType<GenerateTask> {
+    tasks.register("installAppDependencies") {
         dependsOn(generateFlutterBindingTask)
         inputs.files("pubspec.yaml", clientCode)
         outputs.files("pubspec.lock")
@@ -133,7 +134,7 @@ artifacts.add(webDistZipConfig.name, zipWebReleaseTask.get())
 val flutterTestTask =
     tasks.register("test") {
         dependsOn(prepareEnvTask)
-        runFlutterCommand("flutter test")
+        doLast { runFlutterCommand("flutter test") }
     }
 
 tasks.register("integrationTest") { println("No integration tests defined for app module") }
