@@ -1,0 +1,45 @@
+name: run-tests
+
+on: push
+
+jobs:
+  tests:
+    name: Run Tests
+    runs-on: ubuntu-latest-8-cores
+    strategy:
+      matrix:
+        module: [ "server", "app" ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Cache dart packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-flutter-install-cache
+          restore-keys: ${{ runner.os }}--flutter-install-cache
+
+      - name: Run test ${{matrix.module}}
+        run: ./gradlew ${{matrix:module}}:test
+
+
