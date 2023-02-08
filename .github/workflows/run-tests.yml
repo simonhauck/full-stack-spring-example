@@ -5,7 +5,7 @@ on: push
 jobs:
   tests:
     name: Run Tests
-    runs-on: ubuntu-latest-8-cores
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         module:
