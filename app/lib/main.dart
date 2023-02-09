@@ -52,9 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String responseText = "No requests";
 
-
-  final api = Server(basePathOverride: "http://10.0.2.2:8080").getExampleControllerApi();
-
+  final api = Server(basePathOverride: "http://10.0.2.2:8080")
+      .getExampleControllerApi();
 
   void _incrementCounter() async {
     var response = await api.getHelloWorld();
@@ -109,10 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headlineMedium,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             Text(responseText),
           ],

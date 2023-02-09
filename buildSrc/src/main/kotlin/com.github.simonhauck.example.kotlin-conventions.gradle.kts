@@ -42,6 +42,10 @@ ktfmt {
     removeUnusedImports.set(true)
 }
 
+tasks.register("checkFormat") { dependsOn(tasks.ktfmtCheck) }
+
+tasks.register("format") { dependsOn(tasks.ktfmtFormat) }
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Testing config
 // ---------------------------------------------------------------------------------------------------------------------
@@ -51,11 +55,7 @@ tasks.withType<Test>() {
     finalizedBy(tasks.jacocoTestReport)
 }
 
-tasks.jacocoTestReport {
-    reports {
-        xml.required.set(true)
-    }
-}
+tasks.jacocoTestReport { reports { xml.required.set(true) } }
 
 sonarqube {
     properties {
@@ -63,6 +63,3 @@ sonarqube {
         property("sonar.projectKey", "com.bruker.${project.rootProject.name}.${project.name}")
     }
 }
-
-
-

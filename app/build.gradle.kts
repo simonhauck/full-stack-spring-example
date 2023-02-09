@@ -54,6 +54,7 @@ val generateFlutterBindingTask =
         doLast {
             runFlutterCommand("flutter pub get", clientCode)
             runFlutterCommand("flutter pub run build_runner build", clientCode)
+            runDartCommand("dart format .", clientCode)
         }
     }
 
@@ -137,7 +138,21 @@ val flutterTestTask =
         doLast { runFlutterCommand("flutter test") }
     }
 
-tasks.register("integrationTest") { println("No integration tests defined for app module") }
+tasks.register("integrationTest") {
+    dependsOn(prepareEnvTask)
+    // for now just run flutter analyze
+    doLast { runFlutterCommand("flutter analyze .") }
+}
+
+tasks.register("format") {
+    dependsOn(prepareEnvTask)
+    doLast { runDartCommand("dart format .") }
+}
+
+tasks.register("checkFormat") {
+    dependsOn(prepareEnvTask)
+    doLast { runDartCommand("dart format . --set-exit-if-changed") }
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Utility
@@ -146,6 +161,16 @@ tasks.register("integrationTest") { println("No integration tests defined for ap
 tasks.register("clean") { runFlutterCommand("flutter clean") }
 
 fun runFlutterCommand(flutterCommand: String, workDir: String = projectDir.absolutePath) {
+    exec {
+        val command = flutterCommand.toOsCommand()
+        println("Executing $command in $workDir")
+        environment = System.getenv().toMap()
+        workingDir = file(workDir)
+        commandLine = command
+    }
+}
+
+fun runDartCommand(flutterCommand: String, workDir: String = projectDir.absolutePath) {
     exec {
         val command = flutterCommand.toOsCommand()
         println("Executing $command in $workDir")
