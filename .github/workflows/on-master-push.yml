@@ -7,13 +7,13 @@ on:
 
 
 jobs:
-  #  tests:
-  #    uses: ./.github/workflows/run-tests.yml
-  #    secrets: inherit
+  tests:
+    uses: ./.github/workflows/run-tests.yml
+    secrets: inherit
 
   buildDocker:
-    #    needs:
-    #      - tests
+    needs:
+      - tests
     uses: ./.github/workflows/build-docker.yml
     secrets: inherit
 

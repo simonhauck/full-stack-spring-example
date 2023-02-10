@@ -10,7 +10,7 @@ class ExampleController {
 
     @GetMapping("asfasf")
     fun getHelloWorld(): HelloWorldDto {
-        return HelloWorldDto("hello world")
+        return HelloWorldDto("hello world 2")
     }
 }
 
