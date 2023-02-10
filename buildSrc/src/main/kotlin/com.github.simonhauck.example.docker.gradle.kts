@@ -5,7 +5,7 @@ jib {
         //        val registry = System.getenv("DOCKER_REGISTRY")?.plus("/") ?: ""
         val registry = "shauck/"
         val branchName = System.getenv("BRANCH_NAME") ?: "unknown"
-        image = "$registry${project.rootProject.name}/${project.name}"
+        image = "$registry${project.rootProject.name}-${project.name}"
         tags = setOf("${project.version}", branchName)
         auth {
             username = System.getenv("DOCKER_USR")
