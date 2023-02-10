@@ -26,7 +26,7 @@ jobs:
           cache: true
 
       - name: Build docker image
-        run: ./gradlew jib
+        run: ./gradlew jib -Pflutter
         env:
           DOCKER_REGISTRY: ${{ vars.DOCKER_REGISTRY }}
           DOCKER_USR: ${{ vars.DOCKER_USR }}
