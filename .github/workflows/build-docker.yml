@@ -26,6 +26,7 @@ jobs:
       - name: Build docker image
         run: ./gradlew jib
         env:
+          DOCKER_REGISTRY: ${{ vars.DOCKER_REGISTRY }}
           DOCKER_USR: ${{ secrets.DOCKER_USR }}
           DOCKER_PSW: ${{ secrets.DOCKER_PSW }}
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
