@@ -9,3 +9,7 @@ on:
 jobs:
   tests:
     uses: ./.github/workflows/run-tests.yml
+
+  buildDocker:
+    uses: ./github/workflows/build-docker.yml
+
