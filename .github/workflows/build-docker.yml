@@ -28,4 +28,4 @@ jobs:
         env:
           DOCKER_USR: ${{ secrets.DOCKER_USR }}
           DOCKER_PSW: ${{ secrets.DOCKER_PSW }}
-          DOCKER_REGISTRY: ${{ env.DOCKER_REGISTRY }}
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}

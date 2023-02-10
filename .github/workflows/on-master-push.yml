@@ -11,5 +11,7 @@ jobs:
     uses: ./.github/workflows/run-tests.yml
 
   buildDocker:
+    needs:
+      - tests
     uses: ./.github/workflows/build-docker.yml
 
