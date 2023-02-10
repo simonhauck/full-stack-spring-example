@@ -6,6 +6,8 @@ jobs:
   tests:
     name: Build and push docker image
     runs-on: ubuntu-latest
+    # On GitHub create an environment filled with the data
+    environment: Dockerhub
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -26,7 +28,7 @@ jobs:
       - name: Build docker image
         run: ./gradlew jib
         env:
-          DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
-          DOCKER_USR: ${{ secrets.DOCKER_USR }}
+          DOCKER_REGISTRY: ${{ vars.DOCKER_REGISTRY }}
+          DOCKER_USR: ${{ vars.DOCKER_USR }}
           DOCKER_PSW: ${{ secrets.DOCKER_PSW }}
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
