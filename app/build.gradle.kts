@@ -28,7 +28,7 @@ openApiGenerate {
             "pubAuthor" to "Spring Fullstack Example App",
             "pubAuthorEmail" to "example@gmx.de",
             "pubDescription" to "Flutter api binding for the server application",
-            "pubVersion" to "${project.version}",
+            "pubVersion" to "1.0.0",
             "pubName" to "server",
             "pubLibrary" to "server.api",
         )
