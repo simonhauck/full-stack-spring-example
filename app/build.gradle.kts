@@ -75,18 +75,7 @@ val prepareEnvTask = tasks.register("prepareEnv") { dependsOn(installPubDependen
 
 val buildReleaseApkTask =
     tasks.register("buildReleaseApk") {
-        val outputDir = "$buildDir/app/outputs/flutter-apk"
         dependsOn(prepareEnvTask)
-        // This is not 100% perfect, because the android folder could also have an effect on the
-        // output, but this is also always changing and breaking the build
-        inputs.files(
-            "$projectDir/lib",
-            clientCode,
-            "pubspec.yaml",
-            "pubspec.lock",
-        )
-        outputs.dir(outputDir)
-        doFirst { delete(outputDir) }
         doLast { runFlutterCommand("flutter build apk --release") }
     }
 
@@ -98,20 +87,8 @@ val flutterWebBuildDir = "$buildDir/web"
 
 val buildWebReleaseTask =
     tasks.register("buildWebRelease") {
-        val outputDir = flutterWebBuildDir
         dependsOn(prepareEnvTask)
-        // This is not 100% perfect, because the android folder could also have an effect on the
-        // output, but this is also always changing and breaking the build
-        inputs.files(
-            "$projectDir/lib",
-            "${projectDir}/web",
-            "$clientCode",
-            "pubspec.yaml",
-            "pubspec.lock",
-        )
-        outputs.dir(outputDir)
-        doFirst { delete(outputDir) }
-        doLast { runFlutterCommand("flutter build web --web-renderer canvaskit --release") }
+        doLast { runFlutterCommand("flutter build web --web-renderer canvaskit") }
     }
 
 val zipWebReleaseTask =
@@ -184,9 +161,6 @@ fun String.toOsCommand(): List<String> {
     return if (OperatingSystem.current().isWindows) listOf("cmd.exe", "/c", this)
     else this.split(" ").toList()
 }
-
-// fun getOsCommandPrefix() =
-//    if (OperatingSystem.current().isWindows) listOf("cmd.exe", "/c") else emptyList()
 
 fun Copy.performCachedCopy(target: String, inputFiles: Set<Any>) {
     inputs.files(inputFiles)
