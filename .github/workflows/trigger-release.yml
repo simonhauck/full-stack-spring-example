@@ -1,7 +1,7 @@
 name: trigger-release
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       release-version:
         description: 'The version with which the code should be released on master'
