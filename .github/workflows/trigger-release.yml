@@ -1,28 +1,29 @@
-name: run-tests
+name: trigger-release
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       release-version:
         description: 'The version with which the code should be released on master'
+        type: string
         required: true
       new-snapshot-version:
         description: 'The next snapshot version for develop'
+        type: string
         required: true
 
 
-
-
 jobs:
-  #  tests:
-  #    uses: ./.github/workflows/run-tests.yml
-
-
-
+  tests:
+    uses: ./.github/workflows/run-tests.yml
 
   trigger-release:
     runs-on: ubuntu-latest
     name: Trigger the release
+
+    needs:
+      - tests
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -44,7 +45,4 @@ jobs:
 
       - name: Trigger release
         run: ./gradlew release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ github.event.inputs.release-version }} -Prelease.newVersion=${{ github.event.inputs.new-snapshot-version }}
-
-      - #    needs:
-        #      - tests
 
