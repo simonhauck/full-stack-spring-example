@@ -2,8 +2,8 @@ name: run-tests
 
 on:
   push:
-    branches:
-      - develop
+    tags:
+      - v*
 
 jobs:
   tests:
