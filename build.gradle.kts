@@ -20,6 +20,7 @@ configure<ReleaseExtension> {
     val versionPropertiesFile = "${rootDir.absolutePath}/version.properties"
     versionPropertyFile.set(versionPropertiesFile)
 
+    tagTemplate.set("v\${version}")
     pushReleaseVersionBranch.set("master")
-    with(git) { requireBranch.set("develop") }
+    with(git) { requireBranch.set("master") }
 }
