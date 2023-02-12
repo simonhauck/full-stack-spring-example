@@ -1,0 +1,50 @@
+name: run-tests
+
+on:
+  workflow_call:
+    inputs:
+      release-version:
+        description: 'The version with which the code should be released on master'
+        required: true
+      new-snapshot-version:
+        description: 'The next snapshot version for develop'
+        required: true
+
+
+
+
+jobs:
+  #  tests:
+  #    uses: ./.github/workflows/run-tests.yml
+
+
+
+
+  trigger-release:
+    runs-on: ubuntu-latest
+    name: Trigger the release
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: develop
+          token: ${{secrets.PERSONAL_ACCESS_TOKEN}}
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'Release Action'
+          git config --global user.email 'release@noreply.github.com'
+
+      - name: Trigger release
+        run: ./gradlew release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ github.event.inputs.release-version }} -Prelease.newVersion=${{ github.event.inputs.new-snapshot-version }}
+
+      - #    needs:
+        #      - tests
+

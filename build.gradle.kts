@@ -17,8 +17,9 @@ fun readVersionFromFile(): String {
 }
 
 configure<ReleaseExtension> {
-    //    versionPropertyFile.set
     val versionPropertiesFile = "${rootDir.absolutePath}/version.properties"
     versionPropertyFile.set(versionPropertiesFile)
-    with(git) { requireBranch.set("master") }
+
+    pushReleaseVersionBranch.set("master")
+    with(git) { requireBranch.set("develop") }
 }

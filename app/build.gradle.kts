@@ -76,7 +76,8 @@ val prepareEnvTask = tasks.register("prepareEnv") { dependsOn(installPubDependen
 val buildReleaseApkTask =
     tasks.register("buildReleaseApk") {
         dependsOn(prepareEnvTask)
-        doLast { runFlutterCommand("flutter build apk --release") }
+        val versionTag = "--build-name=${project.version}"
+        doLast { runFlutterCommand("flutter build apk --release $versionTag") }
     }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -88,7 +89,10 @@ val flutterWebBuildDir = "$buildDir/web"
 val buildWebReleaseTask =
     tasks.register("buildWebRelease") {
         dependsOn(prepareEnvTask)
-        doLast { runFlutterCommand("flutter build web --web-renderer canvaskit") }
+        doLast {
+            val versionTag = "--build-name=${project.version}"
+            runFlutterCommand("flutter build web --web-renderer canvaskit $versionTag")
+        }
     }
 
 val zipWebReleaseTask =
