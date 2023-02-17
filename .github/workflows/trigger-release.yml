@@ -58,7 +58,7 @@ jobs:
         run: git tag ${{ github.event.inputs.release-version }} HEAD
 
       - name: Push release commit
-        run: git push origin HEAD
+        run: git push origin HEAD --follow-tags
 
       - name: Set version to ${{ github.event.inputs.new-snapshot-version }}
         uses: DamianReeves/write-file-action@v1.2
