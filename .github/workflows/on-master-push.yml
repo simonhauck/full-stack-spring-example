@@ -45,6 +45,8 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
+          generate_release_notes: true
+          append_body: false
           files: |
             build/**
 
