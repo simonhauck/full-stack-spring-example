@@ -8,6 +8,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -30,6 +31,7 @@ jobs:
 
       - name: Create release
         uses: softprops/action-gh-release@v1
+
         with:
           generate_release_notes: true
           append_body: false
