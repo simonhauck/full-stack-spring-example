@@ -16,3 +16,5 @@
     1. Key: PERSONAL_ACCESS_TOKEN Value: The personal access
        token [Tutorial](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
        with scope repository
+3. Configure protection rules
+4. Protect tags with format ``v*``

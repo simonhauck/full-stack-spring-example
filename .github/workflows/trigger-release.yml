@@ -8,7 +8,7 @@ on:
         type: string
         required: true
       new-snapshot-version:
-        description: 'The next snapshot version for develop'
+        description: 'The next snapshot version for master'
         type: string
         required: true
 
@@ -43,6 +43,34 @@ jobs:
           git config --global user.name 'Release Action'
           git config --global user.email 'release@noreply.github.com'
 
-      - name: Trigger release
-        run: ./gradlew release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ github.event.inputs.release-version }} -Prelease.newVersion=${{ github.event.inputs.new-snapshot-version }}
+      - name: Set version to ${{ github.event.inputs.release-version }}
+        uses: DamianReeves/write-file-action@v1.2
+        with:
+          path: version.properties
+          write-mode: overwrite
+          contents: |
+            version=${{ github.event.inputs.release-version }}
+
+      - name: Commit release version
+        run: git commit -a -m "Bump version to ${{ github.event.inputs.release-version }}"
+
+      - name: Tag release commit
+        run: git tag ${{ github.event.inputs.release-version }} HEAD
+
+      - name: Push release commit
+        run: git push origin HEAD
+
+      - name: Set version to ${{ github.event.inputs.new-snapshot-version }}
+        uses: DamianReeves/write-file-action@v1.2
+        with:
+          path: version.properties
+          write-mode: overwrite
+          contents: |
+            version=${{ github.event.inputs.new-snapshot-version }}
+
+      - name: Commit new snapshot version
+        run: git commit -a -m "Bump version to ${{ github.event.inputs.new-snapshot-version }}"
+
+      - name: Push new snapshot version commit
+        run: git push origin HEAD
 

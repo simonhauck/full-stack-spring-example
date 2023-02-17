@@ -110,6 +110,19 @@ val webDistZipConfig = configurations.create("default")
 artifacts.add(webDistZipConfig.name, zipWebReleaseTask.get())
 
 // ---------------------------------------------------------------------------------------------------------------------
+// Prepare Release
+// ---------------------------------------------------------------------------------------------------------------------
+
+tasks.register<Copy>("prepareReleaseArtifacts") {
+    dependsOn(buildReleaseApkTask)
+    performCachedCopy(
+        "${rootProject.buildDir}/artifacts/${project.name}",
+        setOf("$buildDir/${project.name}/outputs/flutter-apk")
+    )
+    rename { "${rootProject.name}-$it" }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 // Test tasks
 // ---------------------------------------------------------------------------------------------------------------------
 
