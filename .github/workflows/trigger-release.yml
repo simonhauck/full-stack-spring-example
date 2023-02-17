@@ -20,10 +20,8 @@ jobs:
   trigger-release:
     runs-on: ubuntu-latest
     name: Trigger the release
-
-    #    needs:
-    #      - tests
-
+    needs:
+      - tests
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
