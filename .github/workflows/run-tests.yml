@@ -32,6 +32,9 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Assemble ${{matrix.module}}
+        run: ./gradlew ${{matrix.module}}:assemble
+
       - name: Run test ${{matrix.module}}
         run: ./gradlew ${{matrix.module}}:test
 
