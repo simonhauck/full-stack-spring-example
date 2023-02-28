@@ -60,3 +60,8 @@ openApi {
         )
     }
 }
+
+tasks.withType<com.github.psxpaul.task.JavaExecFork> {
+    dependsOn(tasks.getByName("inspectClassesForKotlinIC"))
+}
+
