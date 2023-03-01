@@ -1,3 +1,5 @@
+import org.springdoc.openapi.gradle.plugin.OpenApiGeneratorTask
+
 plugins {
     id("com.github.simonhauck.example.artifactory")
     id("com.github.simonhauck.example.kotlin-conventions")
@@ -60,6 +62,9 @@ openApi {
         )
     }
 }
+
+tasks.withType<OpenApiGeneratorTask>() { outputs.upToDateWhen { false } }
+
 
 tasks.withType<com.github.psxpaul.task.JavaExecFork> {
     dependsOn(tasks.getByName("inspectClassesForKotlinIC"))
