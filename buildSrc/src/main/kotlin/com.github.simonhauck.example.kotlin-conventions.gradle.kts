@@ -8,6 +8,7 @@ plugins {
     id("com.adarshr.test-logger")
     id("com.coditory.integration-test")
     id("com.ncorti.ktfmt.gradle")
+    idea
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
