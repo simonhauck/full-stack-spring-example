@@ -29,6 +29,19 @@ tasks.withType<KotlinCompile> {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+// IntegrationTest config
+// ---------------------------------------------------------------------------------------------------------------------
+
+// So that tests are correctly shown in the create test dialog and the test naming conventions are
+// applied
+idea {
+    module {
+        testSources.from(testSources, sourceSets.integration.get().kotlin.srcDirs)
+        testResources.from(testResources, sourceSets.integration.get().resources.srcDirs)
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 // Kotlin formatter
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -60,6 +73,6 @@ tasks.jacocoTestReport { reports { xml.required.set(true) } }
 sonarqube {
     properties {
         property("sonar.projectName", "${project.rootProject.name} :: ${project.name}")
-        property("sonar.projectKey", "com.bruker.${project.rootProject.name}.${project.name}")
+        property("sonar.projectKey", "com.github.example.${project.rootProject.name}.${project.name}")
     }
 }
