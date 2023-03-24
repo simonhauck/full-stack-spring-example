@@ -7,10 +7,9 @@ pluginManagement {
     }
 }
 
-include("server")
-
-include("server-api")
-
-include("common-test")
-
-include("app")
+include(
+    "server",
+    "server-api",
+    "common-test",
+    "app"
+)
