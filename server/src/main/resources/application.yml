@@ -11,4 +11,3 @@ spring:
         cachecontrol:
           no-store: true
           no-cache: true
-
