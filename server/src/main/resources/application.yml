@@ -11,3 +11,7 @@ spring:
         cachecontrol:
           no-store: true
           no-cache: true
+
+# Swagger HTTPS Header is not forwarded correctly
+server:
+  forward-headers-strategy: framework
