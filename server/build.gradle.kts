@@ -66,7 +66,3 @@ openApi {
 tasks.withType<OpenApiGeneratorTask>() { outputs.upToDateWhen { false } }
 
 
-tasks.withType<com.github.psxpaul.task.JavaExecFork> {
-    dependsOn(tasks.getByName("inspectClassesForKotlinIC"))
-}
-
