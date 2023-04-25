@@ -22,7 +22,7 @@ dependencies {
     implementation("com.adarshr:gradle-test-logger-plugin:3.2.0")
 
     // Kotlin version
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21")
 
     // Kotlin formatting
     implementation("com.ncorti.ktfmt.gradle:plugin:0.12.0")
@@ -30,6 +30,6 @@ dependencies {
     // Spring plugins
     implementation("org.springframework.boot:spring-boot-gradle-plugin:3.0.5")
     implementation("io.spring.gradle:dependency-management-plugin:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-noarg:1.8.20")
-    implementation("org.jetbrains.kotlin:kotlin-allopen:1.8.20")
+    implementation("org.jetbrains.kotlin:kotlin-noarg:1.8.21")
+    implementation("org.jetbrains.kotlin:kotlin-allopen:1.8.21")
 }
