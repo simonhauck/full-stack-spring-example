@@ -13,7 +13,7 @@ dependencies {
     implementation("com.google.cloud.tools:jib-gradle-plugin:3.3.2")
 
     // Sonar
-    implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.1.0.3113")
+    implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.2.0.3129")
 
     // Add integration tests
     implementation("com.coditory.gradle:integration-test-plugin:1.4.5")
