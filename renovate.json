@@ -6,6 +6,9 @@
   ],
   "packageRules": [
     {
+      "automerge": true
+    },
+    {
       "groupName": "Kotlin",
       "matchPackageNames": [
         "org.jetbrains.kotlin:kotlin-noarg",
