@@ -19,7 +19,7 @@ dependencies {
     implementation("com.coditory.gradle:integration-test-plugin:1.4.5")
 
     // Print out test results nicely
-    implementation("com.adarshr:gradle-test-logger-plugin:3.2.0")
+    implementation("com.adarshr:gradle-test-logger-plugin:4.0.0")
 
     // Kotlin version
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10")
