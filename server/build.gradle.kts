@@ -7,7 +7,7 @@ plugins {
     id("com.github.simonhauck.example.docker")
 
     // Generate open api doc
-    id("org.springdoc.openapi-gradle-plugin") version "1.7.0"
+    id("org.springdoc.openapi-gradle-plugin") version "1.8.0"
 }
 
 val apiSpecification: Configuration by configurations.creating {}
