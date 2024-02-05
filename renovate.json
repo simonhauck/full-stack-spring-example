@@ -2,13 +2,11 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base",
-    ":dependencyDashboard"
+    ":dependencyDashboard",
+    ":automergeAll",
+    ":automergeBranch"
   ],
   "packageRules": [
-    {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "major"],
-      "automerge": true
-    },
     {
       "groupName": "Kotlin",
       "matchPackageNames": [
