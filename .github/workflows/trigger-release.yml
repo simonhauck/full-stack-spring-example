@@ -41,7 +41,7 @@ jobs:
           git config --global user.email 'release@noreply.github.com'
 
       - name: Set version to ${{ github.event.inputs.release-version }}
-        uses: DamianReeves/write-file-action@v1.2
+        uses: DamianReeves/write-file-action@v1.3
         with:
           path: version.properties
           write-mode: overwrite
@@ -58,7 +58,7 @@ jobs:
         run: git push --atomic origin HEAD v${{ github.event.inputs.release-version }}
 
       - name: Set version to ${{ github.event.inputs.new-snapshot-version }}
-        uses: DamianReeves/write-file-action@v1.2
+        uses: DamianReeves/write-file-action@v1.3
         with:
           path: version.properties
           write-mode: overwrite
