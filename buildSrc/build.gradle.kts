@@ -28,7 +28,7 @@ dependencies {
     implementation("com.ncorti.ktfmt.gradle:plugin:0.18.0")
 
     // Spring plugins
-    implementation("org.springframework.boot:spring-boot-gradle-plugin:3.2.5")
+    implementation("org.springframework.boot:spring-boot-gradle-plugin:3.3.0")
     implementation("io.spring.gradle:dependency-management-plugin:1.1.5")
     implementation("org.jetbrains.kotlin:kotlin-noarg:2.0.0")
     implementation("org.jetbrains.kotlin:kotlin-allopen:2.0.0")
