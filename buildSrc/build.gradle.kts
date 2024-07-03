@@ -25,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
 
     // Kotlin formatting
-    implementation("com.ncorti.ktfmt.gradle:plugin:0.18.0")
+    implementation("com.ncorti.ktfmt.gradle:plugin:0.19.0")
 
     // Spring plugins
     implementation("org.springframework.boot:spring-boot-gradle-plugin:3.3.1")
