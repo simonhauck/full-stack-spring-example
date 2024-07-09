@@ -23,7 +23,7 @@ dependencies {
 
     // Test Utility
     implementation("org.springframework.boot:spring-boot-starter-test")
-    implementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
+    implementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
     implementation("org.xmlunit:xmlunit-assertj:2.10.0")
     implementation("org.awaitility:awaitility:4.2.1")
 }
