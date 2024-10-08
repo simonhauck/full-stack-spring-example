@@ -3,7 +3,7 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
     id("com.github.simonhauck.example.artifactory")
-    id("org.openapi.generator") version "7.8.0"
+    id("org.openapi.generator") version "7.9.0"
 }
 
 val apiSpecification: Configuration by configurations.creating {}
