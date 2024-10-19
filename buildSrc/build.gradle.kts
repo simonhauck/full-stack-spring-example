@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     // Docker container
-    implementation("com.google.cloud.tools:jib-gradle-plugin:3.4.3")
+    implementation("com.google.cloud.tools:jib-gradle-plugin:3.4.4")
 
     // Sonar
     implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:5.1.0.4882")
