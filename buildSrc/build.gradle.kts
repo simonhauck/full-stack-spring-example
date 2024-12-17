@@ -29,7 +29,7 @@ dependencies {
 
     // Spring plugins
     implementation("org.springframework.boot:spring-boot-gradle-plugin:3.4.0")
-    implementation("io.spring.gradle:dependency-management-plugin:1.1.6")
+    implementation("io.spring.gradle:dependency-management-plugin:1.1.7")
     implementation("org.jetbrains.kotlin:kotlin-noarg:2.1.0")
     implementation("org.jetbrains.kotlin:kotlin-allopen:2.1.0")
 }
